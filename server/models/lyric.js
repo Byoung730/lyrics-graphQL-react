@@ -1,23 +1,27 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const LyricSchema = new Schema({
-  song: {
-    type: Schema.Types.ObjectId,
-    ref: 'song'
+const LyricSchema = new Schema(
+  {
+    song: {
+      type: Schema.Types.ObjectId,
+      ref: "song"
+    },
+    likes: { type: Number, default: 0 },
+    content: { type: String }
   },
-  likes: { type: Number, default: 0 },
-  content: { type: String }
-});
+  {
+    usePushEach: true
+  }
+);
 
 LyricSchema.statics.like = function(id) {
-  const Lyric = mongoose.model('lyric');
+  const Lyric = mongoose.model("lyric");
 
-  return Lyric.findById(id)
-    .then(lyric => {
-      ++lyric.likes;
-      return lyric.save();
-    })
-}
+  return Lyric.findById(id).then(lyric => {
+    ++lyric.likes;
+    return lyric.save();
+  });
+};
 
-mongoose.model('lyric', LyricSchema);
+mongoose.model("lyric", LyricSchema);
